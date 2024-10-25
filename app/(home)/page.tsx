@@ -1,13 +1,22 @@
-import Navigation from "../../components/navigation";
-
-export const metadata = {
-  title: "Home",
-};
+"use client";
+import React, { use, useEffect } from "react";
 
 export default function Page() {
-  return (
-    <div>
-      <h1>Hello NextJ!</h1>
-    </div>
-  );
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [movies, setMovies] = React.useState([]);
+
+  const getMovies = async () => {
+    const response = await fetch(
+      "https://nomad-movies.nomadcoders.workers.dev/movies"
+    );
+    const data = await response.json();
+    setMovies(data);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getMovies();
+  }, []);
+
+  return <div>{isLoading ? "Loading..." : JSON.stringify(movies)}</div>;
 }
