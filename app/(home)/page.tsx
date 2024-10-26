@@ -6,7 +6,7 @@ export const metadata = {
   title: "Home",
 };
 const getMovies = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
   console.log("fetching movies");
   return fetch(API_URL).then((response) => response.json());
 };
