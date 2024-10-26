@@ -1,11 +1,13 @@
 import Link from "next/link";
 import React, { use, useEffect } from "react";
 import Movie from "../../components/movie";
-export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
 import styles from "../../styles/home.module.css";
+import { API_URL } from "../../constants/constant";
+
 export const metadata = {
   title: "Home",
 };
+
 const getMovies = async () => {
   // await new Promise((resolve) => setTimeout(resolve, 1000));
 

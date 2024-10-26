@@ -1,32 +1,38 @@
-import React, { Suspense, use } from "react";
-import { API_URL } from "../../../(home)/page";
+import React, { Suspense } from "react";
 import MovieInfo, { getMovie } from "../../../../components/movie-info";
 import MovieVideos from "../../../../components/movie-videos";
 
-/**
- {
-  params: Promise {
-    id: '12334',
-} 
- */
+type MovieDetailProps = {
+  params: Promise<{ id: string }>;
+};
 
-interface IParams {
-  params: { id: string };
+// 공통 로딩 컴포넌트 분리
+const Loading = ({ message }: { message: string }) => <h1>{message}</h1>;
+
+export async function generateMetadata(props: MovieDetailProps) {
+  try {
+    const { id } = await props.params; // 비동기 처리
+    const { title } = await getMovie(id);
+    return {
+      title: title || "Movie Detail",
+    };
+  } catch (error) {
+    console.error("Failed to generate metadata:", error);
+    return {
+      title: "Movie Detail",
+    };
+  }
 }
 
-export async function generateMetadata({ params: { id } }: IParams) {
-  const { title } = await getMovie(id);
-  return {
-    title: title,
-  };
-}
-export default async function MovieDetail({ params: { id } }: IParams) {
+export default async function MovieDetail(props: MovieDetailProps) {
+  const { id } = await props.params; // 비동기 처리
+
   return (
     <div>
-      <Suspense fallback={<h1>Loading movie info</h1>}>
+      <Suspense fallback={<Loading message="Loading movie info" />}>
         <MovieInfo id={id} />
       </Suspense>
-      <Suspense fallback={<h1>Loading movie video</h1>}>
+      <Suspense fallback={<Loading message="Loading movie videos" />}>
         <MovieVideos id={id} />
       </Suspense>
     </div>
